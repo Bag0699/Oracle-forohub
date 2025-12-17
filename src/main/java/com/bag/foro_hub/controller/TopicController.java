@@ -31,7 +31,26 @@ public class TopicController {
   }
 
   @GetMapping
-  public List<TopicResponse> findAll() {
-    return topicService.findAll();
+  public ResponseEntity<List<TopicResponse>> findAll() {
+    return ResponseEntity.ok(topicService.findAll());
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<TopicResponse> findById(@PathVariable Long id) {
+    return ResponseEntity.ok(topicService.findById(id));
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<TopicResponse> update(
+      @PathVariable Long id, @Valid @RequestBody CreateTopicRequest request) {
+
+    TopicResponse topicResponse = topicService.update(id, request);
+    return ResponseEntity.ok(topicResponse);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    topicService.deleteById(id);
+    return ResponseEntity.noContent().build();
   }
 }
