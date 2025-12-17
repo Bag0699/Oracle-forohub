@@ -1,5 +1,7 @@
 package com.bag.foro_hub.service;
 
+import com.bag.foro_hub.exceptions.CourseNotFoundException;
+import com.bag.foro_hub.exceptions.UserNotFoundException;
 import com.bag.foro_hub.mapper.TopicMapper;
 import com.bag.foro_hub.model.dto.request.CreateTopicRequest;
 import com.bag.foro_hub.model.dto.response.TopicResponse;
@@ -42,8 +44,8 @@ public class TopicServiceImpl implements TopiService {
                           return topicRepository.save(topic);
                         })
                     .map(topicMapper::toTopicResponse)
-                    .orElseThrow())
-        .orElseThrow();
+                    .orElseThrow(CourseNotFoundException::new))
+        .orElseThrow(UserNotFoundException::new);
   }
 
   @Override
