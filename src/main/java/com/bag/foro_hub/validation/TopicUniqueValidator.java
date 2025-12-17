@@ -18,4 +18,11 @@ public class TopicUniqueValidator implements TopicValidator {
       throw new ValidatorException("Ya existe un tema con ese titulo y mensaje");
     }
   }
+
+  @Override
+  public void valideteForUpdate(CreateTopicRequest request, Long id) {
+    if (topicRepository.existsByTitleAndMessageAndIdNot(request.title(), request.message(), id)) {
+      throw new ValidatorException("Ya existe otro tema con ese titulo y mensaje");
+    }
+  }
 }
