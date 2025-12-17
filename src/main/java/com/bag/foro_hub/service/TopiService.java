@@ -10,4 +10,10 @@ public interface TopiService {
   TopicResponse save(CreateTopicRequest request);
 
   List<TopicResponse> findAll();
+
+  TopicResponse findById(Long id);
+
+  TopicResponse update(Long id, CreateTopicRequest request);
+
+  void deleteById(Long id);
 }
