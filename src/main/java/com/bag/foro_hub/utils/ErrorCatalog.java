@@ -7,7 +7,9 @@ public enum ErrorCatalog {
   TOPIC_NOT_FOUND("ERR_TPC_NOT_FOUND", "Topic not found"),
   USER_NOT_FOUND("ERR_USR_NOT_FOUND", "User not found"),
   COURSE_NOT_FOUND("ERR_CRS_NOT_FOUND", "Course not found"),
+    REPLY_NOT_FOUND("ERR_RPL_NOT_FOUND", "Reply not found"),
   INVALID_REQUEST("ERR_INV_REQ", "Invalid request"),
+  DUPLICATE_EMAIL("ERR_DUP_EMAIL", "Email already registered"),
   GENERIC_ERROR("ERR_GEN", "Generic error");
 
   private final String code;

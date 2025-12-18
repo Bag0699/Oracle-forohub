@@ -26,7 +26,6 @@ public class Profile {
 
   private String bio;
 
-  @OneToOne
-  @JoinColumn(name = "user_id")
+  @OneToOne(mappedBy = "profile")
   private User user;
 }
