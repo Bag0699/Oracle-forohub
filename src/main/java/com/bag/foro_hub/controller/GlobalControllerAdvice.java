@@ -1,6 +1,7 @@
 package com.bag.foro_hub.controller;
 
 import com.bag.foro_hub.exceptions.CourseNotFoundException;
+import com.bag.foro_hub.exceptions.DuplicateEmailException;
 import com.bag.foro_hub.exceptions.TopicNotFoundException;
 import com.bag.foro_hub.exceptions.UserNotFoundException;
 import com.bag.foro_hub.model.dto.response.ErrorResponse;
@@ -49,6 +50,17 @@ public class GlobalControllerAdvice {
         .code(COURSE_NOT_FOUND.getCode())
         .status(HttpStatus.NOT_FOUND)
         .message(COURSE_NOT_FOUND.getMessage())
+        .timestamp(LocalDateTime.now())
+        .build();
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(DuplicateEmailException.class)
+  public ErrorResponse handleDuplicateEmailException() {
+    return ErrorResponse.builder()
+        .code(DUPLICATE_EMAIL.getCode())
+        .status(HttpStatus.BAD_REQUEST)
+        .message(DUPLICATE_EMAIL.getMessage())
         .timestamp(LocalDateTime.now())
         .build();
   }
