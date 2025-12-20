@@ -2,6 +2,7 @@ package com.bag.foro_hub.validation;
 
 import com.bag.foro_hub.exceptions.ValidatorException;
 import com.bag.foro_hub.model.dto.request.CreateTopicRequest;
+import com.bag.foro_hub.model.dto.request.UpdateTopicRequest;
 import com.bag.foro_hub.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class TopicUniqueValidator implements TopicValidator {
   }
 
   @Override
-  public void valideteForUpdate(CreateTopicRequest request, Long id) {
+  public void valideteForUpdate(UpdateTopicRequest request, Long id) {
     if (topicRepository.existsByTitleAndMessageAndIdNot(request.title(), request.message(), id)) {
       throw new ValidatorException("Ya existe otro tema con ese titulo y mensaje");
     }
