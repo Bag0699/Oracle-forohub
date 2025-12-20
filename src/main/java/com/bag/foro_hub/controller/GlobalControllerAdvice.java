@@ -1,9 +1,6 @@
 package com.bag.foro_hub.controller;
 
-import com.bag.foro_hub.exceptions.CourseNotFoundException;
-import com.bag.foro_hub.exceptions.DuplicateEmailException;
-import com.bag.foro_hub.exceptions.TopicNotFoundException;
-import com.bag.foro_hub.exceptions.UserNotFoundException;
+import com.bag.foro_hub.exceptions.*;
 import com.bag.foro_hub.model.dto.response.ErrorResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -50,6 +47,17 @@ public class GlobalControllerAdvice {
         .code(COURSE_NOT_FOUND.getCode())
         .status(HttpStatus.NOT_FOUND)
         .message(COURSE_NOT_FOUND.getMessage())
+        .timestamp(LocalDateTime.now())
+        .build();
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(ReplyNotFoundException.class)
+  public ErrorResponse handleReplyNotFoundException() {
+    return ErrorResponse.builder()
+        .code(REPLY_NOT_FOUND.getCode())
+        .status(HttpStatus.NOT_FOUND)
+        .message(REPLY_NOT_FOUND.getMessage())
         .timestamp(LocalDateTime.now())
         .build();
   }
