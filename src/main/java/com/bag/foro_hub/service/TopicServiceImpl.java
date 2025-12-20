@@ -1,10 +1,12 @@
 package com.bag.foro_hub.service;
 
 import com.bag.foro_hub.exceptions.CourseNotFoundException;
+import com.bag.foro_hub.exceptions.RoleAccessDeniedException;
 import com.bag.foro_hub.exceptions.TopicNotFoundException;
 import com.bag.foro_hub.exceptions.UserNotFoundException;
 import com.bag.foro_hub.mapper.TopicMapper;
 import com.bag.foro_hub.model.dto.request.CreateTopicRequest;
+import com.bag.foro_hub.model.dto.request.UpdateTopicRequest;
 import com.bag.foro_hub.model.dto.response.TopicResponse;
 import com.bag.foro_hub.model.entity.Course;
 import com.bag.foro_hub.model.entity.Topic;
@@ -21,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TopicServiceImpl implements TopiService {
+public class TopicServiceImpl implements TopicService {
 
   private final TopicRepository topicRepository;
   private final CourseRepository courseRepository;
@@ -31,10 +33,10 @@ public class TopicServiceImpl implements TopiService {
 
   @Override
   @Transactional
-  public TopicResponse save(CreateTopicRequest request) {
+  public TopicResponse save(CreateTopicRequest request, Long authId) {
 
     topicValidator.validate(request);
-    User user = userRepository.findById(request.userId()).orElseThrow(UserNotFoundException::new);
+    User user = userRepository.findById(authId).orElseThrow(UserNotFoundException::new);
     Course course =
         courseRepository.findById(request.courseId()).orElseThrow(CourseNotFoundException::new);
 
@@ -63,18 +65,21 @@ public class TopicServiceImpl implements TopiService {
 
   @Override
   @Transactional
-  public TopicResponse update(Long id, CreateTopicRequest request) {
+  public TopicResponse update(Long id, UpdateTopicRequest request, Long authId) {
     Topic topic = topicRepository.findById(id).orElseThrow(TopicNotFoundException::new);
+
+    boolean isOwner = topic.belongsToUser(authId);
+    if (!isOwner) {
+      throw new RoleAccessDeniedException("You are not the owner of this topic");
+    }
 
     topicValidator.valideteForUpdate(request, id);
 
-    User user = userRepository.findById(request.userId()).orElseThrow(UserNotFoundException::new);
     Course course =
         courseRepository.findById(request.courseId()).orElseThrow(CourseNotFoundException::new);
 
     topic.setTitle(request.title());
     topic.setMessage(request.message());
-    topic.setUser(user);
     topic.setCourse(course);
 
     return topicMapper.toTopicResponse(topicRepository.save(topic));
