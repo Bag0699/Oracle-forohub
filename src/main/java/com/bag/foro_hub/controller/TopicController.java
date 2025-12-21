@@ -56,7 +56,9 @@ public class TopicController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-    topicService.deleteById(id);
+    Long authId = jwtUtils.getAuthenticatedUser();
+
+    topicService.deleteById(id, authId);
     return ResponseEntity.noContent().build();
   }
 }

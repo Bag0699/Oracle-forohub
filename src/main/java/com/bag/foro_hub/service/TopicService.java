@@ -16,5 +16,5 @@ public interface TopicService {
 
   TopicResponse update(Long id, UpdateTopicRequest request , Long authId);
 
-  void deleteById(Long id);
+  void deleteById(Long id, Long authId);
 }

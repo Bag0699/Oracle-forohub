@@ -87,10 +87,14 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   @Transactional
-  public void deleteById(Long id) {
-    if (!topicRepository.existsById(id)) {
-      throw new TopicNotFoundException();
+  public void deleteById(Long id, Long authId) {
+    Topic topic = topicRepository.findById(id).orElseThrow(TopicNotFoundException::new);
+
+    boolean isOwner = topic.belongsToUser(authId);
+    if (!isOwner) {
+      throw new RoleAccessDeniedException("You are not the owner of this topic");
     }
+
     topicRepository.deleteById(id);
   }
 }
