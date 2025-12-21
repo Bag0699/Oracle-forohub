@@ -43,4 +43,8 @@ public class Topic {
 
   @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Reply> replies = new ArrayList<>();
+
+  public boolean belongsToUser(Long userId) {
+    return this.user.getId().equals(userId);
+  }
 }

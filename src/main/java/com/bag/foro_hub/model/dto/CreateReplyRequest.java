@@ -5,5 +5,4 @@ import jakarta.validation.constraints.NotNull;
 
 public record CreateReplyRequest(
     @NotEmpty(message = "The field message cannot be blank or null") String message,
-    @NotNull(message = "The field topicId cannot be null") Long topicId,
-    @NotNull(message = "The field userId cannot be null") Long userId) {}
+    @NotNull(message = "The field topicId cannot be null") Long topicId) {}

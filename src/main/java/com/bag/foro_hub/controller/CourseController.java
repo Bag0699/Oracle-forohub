@@ -14,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/courses")
+@RequestMapping("/api/")
 public class CourseController {
 
   private final CourseService courseService;
 
-  @PostMapping
+  @PostMapping("/admin/courses")
   public ResponseEntity<CourseResponse> save(
       @Valid @RequestBody CreateCourseRequest request, UriComponentsBuilder uriComponentsBuilder) {
 
@@ -30,17 +30,17 @@ public class CourseController {
     return ResponseEntity.created(url).body(courseResponse);
   }
 
-  @GetMapping
+  @GetMapping("/courses")
   public ResponseEntity<List<CourseResponse>> findAll() {
     return ResponseEntity.ok(courseService.findAll());
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/courses/{id}")
   public ResponseEntity<CourseResponse> findById(@PathVariable Long id) {
     return ResponseEntity.ok(courseService.findById(id));
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/admin/courses/{id}")
   public ResponseEntity<CourseResponse> update(
       @PathVariable Long id, @Valid @RequestBody CreateCourseRequest request) {
 
@@ -48,7 +48,7 @@ public class CourseController {
     return ResponseEntity.ok(courseResponse);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/admin/courses/{id}")
   public ResponseEntity<Void> deleteById(@PathVariable Long id) {
     courseService.deleteById(id);
     return ResponseEntity.noContent().build();

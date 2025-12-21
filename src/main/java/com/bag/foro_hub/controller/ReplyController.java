@@ -2,6 +2,7 @@ package com.bag.foro_hub.controller;
 
 import com.bag.foro_hub.model.dto.CreateReplyRequest;
 import com.bag.foro_hub.model.dto.response.ReplyResponse;
+import com.bag.foro_hub.security.JwtUtils;
 import com.bag.foro_hub.service.ReplyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +15,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reply")
+@RequestMapping("/api/replies")
 public class ReplyController {
 
   private final ReplyService replyService;
+  private final JwtUtils jwtUtils;
 
   @PostMapping
   public ResponseEntity<ReplyResponse> save(
       @Valid @RequestBody CreateReplyRequest request, UriComponentsBuilder uriComponentsBuilder) {
-    ReplyResponse replyResponse = replyService.save(request);
+
+    Long authId = jwtUtils.getAuthenticatedUser();
+    ReplyResponse replyResponse = replyService.save(request, authId);
 
     URI url =
         uriComponentsBuilder.path("/api/reply/{id}").buildAndExpand(replyResponse.id()).toUri();
@@ -37,5 +41,13 @@ public class ReplyController {
   @GetMapping("/{id}")
   public ResponseEntity<ReplyResponse> findById(@PathVariable Long id) {
     return ResponseEntity.ok(replyService.findById(id));
+  }
+
+  @PatchMapping("/{id}/solution")
+  public ResponseEntity<Void> markAsSolution(@PathVariable Long id) {
+    Long authId = jwtUtils.getAuthenticatedUser();
+    replyService.markAsSolution(id, authId);
+
+    return ResponseEntity.ok().build();
   }
 }

@@ -1,8 +1,10 @@
 package com.bag.foro_hub.controller;
 
 import com.bag.foro_hub.model.dto.request.CreateTopicRequest;
+import com.bag.foro_hub.model.dto.request.UpdateTopicRequest;
 import com.bag.foro_hub.model.dto.response.TopicResponse;
-import com.bag.foro_hub.service.TopiService;
+import com.bag.foro_hub.security.JwtUtils;
+import com.bag.foro_hub.service.TopicService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +19,16 @@ import java.util.List;
 @RequestMapping("/api/topics")
 public class TopicController {
 
-  private final TopiService topicService;
+  private final TopicService topicService;
+  private final JwtUtils jwtUtils;
 
   @PostMapping
   public ResponseEntity<TopicResponse> save(
       @Valid @RequestBody CreateTopicRequest request, UriComponentsBuilder uriComponentsBuilder) {
 
-    TopicResponse topicResponse = topicService.save(request);
+    Long authId = jwtUtils.getAuthenticatedUser();
+
+    TopicResponse topicResponse = topicService.save(request, authId);
 
     URI url =
         uriComponentsBuilder.path("/api/topics/{id}").buildAndExpand(topicResponse.id()).toUri();
@@ -42,15 +47,18 @@ public class TopicController {
 
   @PutMapping("/{id}")
   public ResponseEntity<TopicResponse> update(
-      @PathVariable Long id, @Valid @RequestBody CreateTopicRequest request) {
+      @PathVariable Long id, @Valid @RequestBody UpdateTopicRequest request) {
 
-    TopicResponse topicResponse = topicService.update(id, request);
+    Long authId = jwtUtils.getAuthenticatedUser();
+    TopicResponse topicResponse = topicService.update(id, request, authId);
     return ResponseEntity.ok(topicResponse);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-    topicService.deleteById(id);
+    Long authId = jwtUtils.getAuthenticatedUser();
+
+    topicService.deleteById(id, authId);
     return ResponseEntity.noContent().build();
   }
 }

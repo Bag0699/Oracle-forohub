@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface ReplyService {
 
-  ReplyResponse save(CreateReplyRequest request);
+  ReplyResponse save(CreateReplyRequest request, Long authId);
 
   List<ReplyResponse> findAll();
 
   ReplyResponse findById(Long id);
+
+  void markAsSolution(Long replyId, Long authid);
 }
