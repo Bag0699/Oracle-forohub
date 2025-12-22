@@ -5,7 +5,7 @@ import com.bag.foro_hub.exceptions.RoleAccessDeniedException;
 import com.bag.foro_hub.exceptions.TopicNotFoundException;
 import com.bag.foro_hub.exceptions.UserNotFoundException;
 import com.bag.foro_hub.mapper.ReplyMapper;
-import com.bag.foro_hub.model.dto.CreateReplyRequest;
+import com.bag.foro_hub.model.dto.request.CreateReplyRequest;
 import com.bag.foro_hub.model.dto.response.ReplyResponse;
 import com.bag.foro_hub.model.entity.Reply;
 import com.bag.foro_hub.model.entity.Topic;
