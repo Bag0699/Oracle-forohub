@@ -10,12 +10,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,8 +48,23 @@ public class TopicController {
       summary = "Listar todos los tópicos",
       description = "Todos los usuarios pueden listarlos")
   @GetMapping
-  public ResponseEntity<List<TopicResponse>> findAll() {
-    return ResponseEntity.ok(topicService.findAll());
+  public ResponseEntity<Page<TopicResponse>> findAll(
+      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    return ResponseEntity.ok(topicService.findAll(page, size));
+  }
+
+  @Operation(
+      summary = "Listar todos los tópicos por curso y año",
+      description = "Todos los usuaios pueden listarlos")
+  @GetMapping("/search")
+  public ResponseEntity<Page<TopicResponse>> findAllByCourseAndYear(
+      @RequestParam Long course,
+      @RequestParam(required = false) Integer year,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size) {
+
+    int defaultYear = (year != null) ? year : LocalDate.now().getYear();
+    return ResponseEntity.ok(topicService.findAllByCourseAndYear(course, defaultYear, page, size));
   }
 
   @Operation(
