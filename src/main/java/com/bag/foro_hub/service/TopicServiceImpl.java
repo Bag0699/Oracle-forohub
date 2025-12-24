@@ -16,10 +16,14 @@ import com.bag.foro_hub.repository.TopicRepository;
 import com.bag.foro_hub.repository.UserRepository;
 import com.bag.foro_hub.validation.TopicValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +54,21 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<TopicResponse> findAll() {
-    return topicRepository.findAll().stream().map(topicMapper::toTopicResponse).toList();
+  public Page<TopicResponse> findAll(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("creationDate").descending());
+    return topicRepository.findAll(pageable).map(topicMapper::toTopicResponse);
+  }
+
+  @Override
+  public Page<TopicResponse> findAllByCourseAndYear(Long courseId, int year, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("creationDate").descending());
+
+    LocalDate startDate = LocalDate.of(year, 1, 1);
+    LocalDate endDate = LocalDate.of(year, 12, 31);
+
+    return topicRepository
+        .findByCourseAndYear(courseId, startDate, endDate, pageable)
+        .map(topicMapper::toTopicResponse);
   }
 
   @Override
