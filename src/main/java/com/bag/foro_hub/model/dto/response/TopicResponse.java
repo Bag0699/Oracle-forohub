@@ -8,6 +8,5 @@ public record TopicResponse(
     @Schema(example = "Que diferencia existe entre un for y un foreach?") String message,
     @Schema(example = "2025-12-21") String creationDate,
     @Schema(example = "OPEN") String status,
-    @Schema(example = "1") Long courseId,
     UserResponse user,
     CourseResponse course) {}
