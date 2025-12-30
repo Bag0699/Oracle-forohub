@@ -55,7 +55,7 @@ public class TopicController {
 
   @Operation(
       summary = "Listar todos los tópicos por curso y año",
-      description = "Todos los usuaios pueden listarlos")
+      description = "Todos los usuarios pueden listarlos")
   @GetMapping("/search")
   public ResponseEntity<Page<TopicResponse>> findAllByCourseAndYear(
       @RequestParam Long course,

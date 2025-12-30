@@ -17,7 +17,7 @@ public class OpenApiConfig {
     return new OpenAPI()
         .info(
             new Info()
-                .title("For Hub API")
+                .title("Foro Hub API")
                 .version("1.0")
                 .contact(new Contact()
                         .name("Brayan Ayala")
